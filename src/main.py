@@ -11,15 +11,18 @@ partner = characters[index]
 
 position = 0
 successes = {'.', ','}
+vowels = {
+    'a': 'á',
+    'e': 'é',
+    'i': 'í',
+    'o': 'ó',
+    'u': 'ú'
+}
 
 
 def render():
     os.system("cls")
-    print(partner.get('skills'))
-    if is_winner():
-        show_partner(partner)
-    else:
-        output_hidden_skills(partner, position, successes)
+    output_hidden_skills(partner, position, successes)
 
 
 def increment_position():
@@ -36,13 +39,27 @@ def decrement_position():
 
 def is_match(letter):
     if letter.lower() == partner.get('skills')[position].lower():
-        successes.add(letter)
+        successes.add(letter.lower())
+        if letter.lower() in 'aeiou':
+            if vowels.get(letter.lower()) in partner.get('skills'):
+                successes.add(vowels.get(letter.lower()))
+
+    elif letter.lower() in 'aeiou':
+        if vowels.get(letter.lower()) == partner.get('skills')[position].lower():
+            successes.add(vowels.get(letter.lower()))
+            successes.add(letter.lower())
 
 
 def is_winner() -> bool:
     skills: str = ''
     skills = partner.get('skills').replace(' ', '')
-    return len(successes) >= len(skills)
+    skills = skills.replace('.', '')
+    skills = skills.replace(',', '')
+    skills = skills.lower()
+    only_letters = successes.copy()
+    only_letters.discard('.')
+    only_letters.discard(',')
+    return len(only_letters) >= len(set(skills))
 
 
 def on_press(key):
@@ -53,6 +70,7 @@ def on_press(key):
 
 
 def on_release(key):
+    os.system("cls")
     if key == keyboard.Key.esc:
         return False
     elif key == keyboard.Key.right:
@@ -60,14 +78,14 @@ def on_release(key):
     elif key == keyboard.Key.left:
         decrement_position()
     render()
+    if is_winner():
+        show_partner(partner)
 
 
 render()
-
 with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
     listener.join()
 
 listener = keyboard.Listener(on_press=on_press, on_release=on_release)
 
-render()
 listener.start()

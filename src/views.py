@@ -1,8 +1,19 @@
+def show_header():
+    print('\t\t DESCUBRE A TU COMPAÑER@\n')
+    print(' 🏆 Torneo de Mario Tennis: Ultra Smash')
+    print('  Descifra este texto que describe sus habilidades:\n')
+
 
 def output_hidden_skills(partner: dict, position: int, successes: set):
     skills: str = partner.get('skills')
     skills_not_space = partner.get('skills').replace(' ', '')
-    print('Aciertos:', len(successes) - 2, '/', len(skills_not_space))
+    skills_not_space = skills_not_space.replace('.', '')
+    skills_not_space = skills_not_space.replace(',', '')
+    skills_not_space = skills_not_space.lower()
+    show_header()
+    print('\t' * 6, end='')
+    print('Aciertos:', len(successes) - 2, '/', len(set(skills_not_space)))
+    print('\n')
     if skills[position] != ' ' and not skills[position].lower() in successes:
         skills = skills.replace(
             skills[position], '🔤'
@@ -22,10 +33,14 @@ def output_hidden_skills(partner: dict, position: int, successes: set):
             print('_', end="")
         else:
             print(letter, end="")
-    print('')
+    print('\n\n')
 
 
 def show_partner(partner: dict):
-    print(partner.get('emoji'), print(partner.get('name')))
-    print('\n')
+    print('')
+    print('-' * 79)
+    print(partner.get('emoji'), partner.get('name'))
+    print('')
     print(partner.get('skills'))
+    print('-' * 79)
+    return False
