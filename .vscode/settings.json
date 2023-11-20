@@ -5,7 +5,10 @@
         "getch",
         "Hadina",
         "keyput",
+        "pynput",
         "Toadette",
+        "venv",
+        "virtualenv",
         "Yoshi"
     ]
 }
